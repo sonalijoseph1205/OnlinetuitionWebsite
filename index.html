@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Sign Up</title>
+  <link rel="stylesheet" href="public/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mx-auto ">
+        <img src="https://img.freepik.com/premium-vector/student-woman-with-laptop-studying-online-course-online-education-concept-vector-illustration-flat_186332-1147.jpg?w=2000" alt="Flat design" class="img-fluid">
+      </div>
+      <div class="col-md-6 offset-md-3">
+        <div class="form-container">
+          <h2 class="text-center mb-4">Student Sign Up</h2>
+          <form method="post" action="/students">
+            <div class="form-group">
+              <label for="studentName">Student Name:</label>
+              <input type="text" class="form-control" id="studentName" name="studentName" required>
+            </div>
+            <div class="form-group">
+              <label for="parentEmail">Parent's Email:</label>
+              <input type="email" class="form-control" id="parentEmail" name="parentEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="parentPhone">Parent's Phone Number:</label>
+              <input type="tel" class="form-control" id="parentPhone" name="parentPhone" required>
+            </div>
+            <div class="form-group">
+              <label for="parentPhone">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm btn-block my-btn">Sign Up</button>
+          </form>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
