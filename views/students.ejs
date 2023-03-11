@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Students</title>
+</head>
+<body>
+  <h1>Student List</h1>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Student Name</th>
+        <th> Parent's Email</th>
+        <th>Parent's Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% students.forEach(student => { %>
+        <tr>
+          <td><%= student.name %></td>
+          <td><%= student.email %></td>
+          <td><%= student.phone %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  
+  <a href="/">Home</a>
+  <a href="/signup">Add Student</a>
+</body>
+</html>

@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const config = require("./config");
+const ejs = require('ejs');
 
 const app = express();
 
@@ -8,6 +9,7 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(express.json()); 
 app.use(express.static("public"));
+app.set('view engine', 'ejs');
 
 const Schema = mongoose.Schema;
 
@@ -53,7 +55,11 @@ const Student = mongoose.model('Student', studentSchema);
 
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/login.html');
+});
+
+app.get('/signup', function(req, res) {
+  res.sendFile(__dirname + '/signup.html');
 });
 
 
@@ -73,20 +79,61 @@ app.post('/students', (req, res) => {
   student.save()
     .then(result => {
       console.log('Inserted new student:', result);
-      res.redirect('/students'); // Redirect to success page after successful insertion
+      res.redirect('/students');
     })
     .catch(err => console.error('Failed to insert student:', err));
 });
 
 
-app.get('/students', (req, res) => {
-  Student.find()
-    .then(students => {
-      console.log('Retrieved all students:', students);
-      res.json(students);
+//Checks if the email and password entred are correct
+app.post('/login', (req, res) => {
+  const email = req.body.parentEmail;
+  const password = req.body.password;
+
+  Student.findOne({ email: email })
+    .then(student => {
+      if (!student) {
+        return res.status(400).send('Invalid Email or Password');
+      }
+      if (student.password !== password) {
+        return res.status(400).send('Invalid Email or Password');
+      }
+      console.log('Logged in student:', student);
+      res.redirect('/students');
     })
-    .catch(err => console.error('Failed to retrieve students:', err));
+    .catch(err => console.error('Failed to find student:', err));
 });
+
+app.get('/students', (req, res) => {
+  Student.find({})
+    .then(students => {
+      console.log(students);
+      res.render('students', { students:students });
+    })
+    .catch(err => console.error('Failed to find students:', err));
+});
+
+
+
+//Checks if the email and password entred are correct
+app.post('/login', (req, res) => {
+  const email = req.body.parentEmail;
+  const password = req.body.password;
+
+  Student.findOne({ email: email })
+    .then(student => {
+      if (!student) {
+        return res.status(400).send('Invalid Email or Password');
+      }
+      if (student.password !== password) {
+        return res.status(400).send('Invalid Email or Password');
+      }
+      console.log('Logged in student:', student);
+      res.redirect('/students');
+    })
+    .catch(err => console.error('Failed to find student:', err));
+});
+
 
 
 let port = process.env.PORT;
