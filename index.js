@@ -12,6 +12,7 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 const Schema = mongoose.Schema;
+const mongoURI = process.env.MONGODB_URI;
 
 // Establish the MongoDB connection using the configured URI
 mongoose.connect(process.env.MONGODB_URI || config.mongoURI, {
