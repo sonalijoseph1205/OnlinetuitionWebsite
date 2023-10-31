@@ -1,10 +1,12 @@
 const express = require("express");
 const mongoose = require('mongoose');
+const serverless = require('serverless-http');
 const ejs = require('ejs');
 const bcrypt = require('bcrypt');
 const app = express();
 const config = require("./config");
 require('dotenv').config();
+const router = express.Router();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -264,6 +266,9 @@ app.post('/students', (req, res) => {
     })
     .catch(err => console.error('Failed to insert student:', err));
 });
+
+app.use('/netlify/functions/index', router)
+module.exports.handler = serverless(app);
 
 const port = process.env.PORT || 3000;
 
