@@ -2,30 +2,68 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Students</title>
+   <title>Students</title>
+    <link rel="stylesheet" href="public/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  <style>
+    body {
+        background-color: #F5F5F5;
+        color: #181823;
+    }
+    
+    .form-container {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px 0px rgba(49, 152, 236, 0.2);
+        margin-top: 0px;
+    }
+    
+    img {
+        max-width: 250px;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 20px;
+        display: block;
+    }
+    
+    .btn-primary.my-btn {
+        background-color: #2fa494;
+        border-color: #2fa494;
+    }
+    
+    .my-img {
+        max-width: 500px!important;
+    }
+</style>
 </head>
 <body>
-  <h1>Student List</h1>
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Student Name</th>
-        <th> Parent's Email</th>
-        <th>Parent's Number</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% students.forEach(student => { %>
+  <div class="col-md-6 offset-md-3">
+    <img src="https://img.freepik.com/premium-vector/student-woman-with-laptop-studying-online-course-online-education-concept-vector-illustration-flat_186332-1147.jpg?w=2000" alt="Student Image">
+        <h1 class="mt-4 text-center">Student List</h1>
+    <table class="table table-bordered table-striped mt-4">
+      <thead>
         <tr>
-          <td><%= student.name %></td>
-          <td><%= student.email %></td>
-          <td><%= student.phone %></td>
+          <th scope="col">Student Name</th>
+          <th> Parent's Email</th>
+          <th>Parent's Number</th>
         </tr>
-      <% }); %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% students.forEach(student => { %>
+          <tr>
+            <td><%= student.name %></td>
+            <td><%= student.email %></td>
+            <td><%= student.phone %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <a class="btn btn-primary my-btn" href="/">Back to Login</a>
+  <a class="btn btn-primary my-btn" href="/signup">Add Student</a>
+  </div>
   
-  <a href="/">Home</a>
-  <a href="/signup">Add Student</a>
+  
 </body>
 </html>

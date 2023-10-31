@@ -4,15 +4,52 @@
     <title>Student Timetable</title>
     <!-- Include Bootstrap CSS (you can link to the Bootstrap CSS file) -->
     <link rel="stylesheet" href="public/style.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #F5F5F5;
+            color: #181823;
+        }
+        
+        .form-container {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(49, 152, 236, 0.2);
+            margin-top: 0px;
+        }
+        
+        img {
+            max-width: 250px;
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 20px;
+            display: block;
+        }
+        
+        .btn-primary.my-btn {
+            background-color: #2fa494;
+            border-color: #2fa494;
+        }
+        
+        .my-img {
+            max-width: 500px!important;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Student Timetable Input</h1>
+        <img src="https://img.freepik.com/premium-vector/student-woman-with-laptop-studying-online-course-online-education-concept-vector-illustration-flat_186332-1147.jpg?w=2000" alt="Student Image">
+        <h1 class="mt-4 text-center">Input</h1>
         <form action="/process" method="post" class="mt-4">
             <div class="form-group">
                 <label for="studentName">Student's Name:</label>
                 <input type="text" id="studentName" name="studentName" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="studentName">Subject:</label>
+                <input type="text" id="Subject" name="Subject" class="form-control" required>
             </div>
 
             <div class="form-group">
@@ -30,14 +67,25 @@
                 <input type="url" id="link" name="link" class="form-control" required>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-sm btn-block my-btn">Submit</button>
+            
+
+            <!-- Use Bootstrap classes to create spacing between buttons -->
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary my-btn">Submit</button>
+                <a class="btn btn-primary my-btn" href="/">Back to Login</a>
+                <a class="btn btn-primary my-btn" href="/students">Student list</a>
+            </div>
         </form>
+
+        <!-- Copyright footer -->
+        <div class="text-center mt-3">
+            <p><i class="fas fa-copyright fa-thin"></i> Sonali Joseph 2023</p>
+        </div>
     </div>
     <!-- Include Bootstrap JavaScript (if needed) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>
-

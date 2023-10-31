@@ -28,4 +28,32 @@ body {
     max-width: 500px!important;
   }
   
-  
+  body {
+    background-color: #F5F5F5;
+    color: #181823;
+}
+
+.form-container {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(49, 152, 236, 0.2);
+    margin-top: 0px;
+}
+
+img {
+    max-width: 250px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    display: block;
+}
+
+.btn-primary.my-btn {
+    background-color: #2fa494;
+    border-color: #2fa494;
+}
+
+.my-img {
+    max-width: 500px!important;
+}

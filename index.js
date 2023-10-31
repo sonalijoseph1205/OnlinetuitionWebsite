@@ -61,6 +61,7 @@ mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: t
 // Define a schema for the timetable collection
 const timetableSchema = new Schema({
   studentName: String,
+  Subject: String,
   classDay: String,
   classTime: String,
   link: String,
@@ -127,13 +128,18 @@ app.get('/admin-login', function (req, res) {
 
 
 app.get('/students', (req, res) => {
+  console.log('Request received for /students'); // Log the request
   Student.find({})
     .then(students => {
-      console.log(students);
-      res.render('students', { students: students });
+      console.log(students); // Log retrieved students
+      res.render('students', { students: students }); // Render the EJS template
     })
-    .catch(err => console.error('Failed to find students:', err));
+    .catch(err => {
+      console.error('Failed to find students:', err); // Log any errors
+      res.status(500).send('Error fetching students'); // Send an error response
+    });
 });
+
 
 app.get('/timetable', (req, res) => {
   Timetable.find({})
@@ -143,6 +149,28 @@ app.get('/timetable', (req, res) => {
     })
     .catch(err => console.error('Failed to find timetable entries:', err));
 });
+
+app.post('/login', (req, res) => {
+  const email = req.body.parentEmail;
+  const password = req.body.password;
+
+  Student.findOne({ email: email })
+    .then(student => {
+      if (!student) {
+        return res.status(400).send('Invalid Email or Password');
+      }
+
+      // Compare the hashed password from the request with the hashed password in the database
+      if (bcrypt.compareSync(password, student.password)) {
+        console.log('Logged in student:', student);
+        res.redirect('/timetable');
+      } else {
+        return res.status(400).send('Invalid Email or Password');
+      }
+    })
+    .catch(err => console.error('Failed to find student:', err));
+});
+
 
 app.post('/admin-signup', (req, res) => {
   const adminEmail = req.body.adminEmail;
@@ -208,12 +236,14 @@ app.post('/admin-login', async (req, res) => {
 
 app.post('/process', (req, res) => {
   const studentName = req.body.studentName;
+  const subject = req.body.Subject;
   const classDay = req.body.classDay;
   const classTime = req.body.classTime;
   const link = req.body.link;
 
   const timetableEntry = new Timetable({
     studentName: studentName,
+    Subject: subject,
     classDay: classDay,
     classTime: classTime,
     link: link,
