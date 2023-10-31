@@ -115,7 +115,7 @@ app.get('/signup', function(req, res) {
 });
 
 app.get('/admin', function(req, res) {
-  res.sendFile(__dirname + '/timetable.html');
+  res.sendFile(__dirname + '/input.html');
 });
 
 app.get('/admin-signup', function (req, res) {
