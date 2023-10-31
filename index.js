@@ -1,10 +1,9 @@
 const express = require("express");
 const mongoose = require('mongoose');
-const config = require("./config");
 const ejs = require('ejs');
 const bcrypt = require('bcrypt');
-
 const app = express();
+const config = require("./config");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -13,10 +12,15 @@ app.set('view engine', 'ejs');
 
 const Schema = mongoose.Schema;
 
-mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+// Establish the MongoDB connection using the configured URI
+mongoose.connect(process.env.MONGODB_URI || config.mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Failed to connect to MongoDB:', err));
 
+// Define the Student schema and model
 const studentSchema = new Schema({
   name: String,
   email: {
@@ -53,12 +57,7 @@ const studentSchema = new Schema({
 
 const Student = mongoose.model('Student', studentSchema);
 
-//Timetable schema
-mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Failed to connect to MongoDB:', err));
-
-// Define a schema for the timetable collection
+// Define the Timetable schema and model
 const timetableSchema = new Schema({
   studentName: String,
   Subject: String,
@@ -69,9 +68,9 @@ const timetableSchema = new Schema({
 
 const Timetable = mongoose.model('Timetable', timetableSchema);
 
-//Admin schema
+// Define the Admin schema and model
 const adminSchema = new Schema({
-  adminEmail: { // Change the field name to match the HTML form input name
+  adminEmail: {
     type: String,
     required: true,
     validate: {
@@ -81,7 +80,7 @@ const adminSchema = new Schema({
       message: props => `${props.value} is not a valid email address!`
     }
   },
-  adminPassword: { // Change the field name to match the HTML form input name
+  adminPassword: {
     type: String,
     required: true,
     validate: {
@@ -97,49 +96,48 @@ const adminSchema = new Schema({
   }
 });
 
-//Admin model 
+// Admin model
 const Admin = mongoose.model('Admin', adminSchema);
-
 
 // Function to hash the password
 const hashPassword = (password) => {
-  return bcrypt.hashSync(password, 10); 
+  return bcrypt.hashSync(password, 10);
 };
 
-app.get('/', function(req, res){
+// Routes
+
+app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/signup', function(req, res) {
+app.get('/signup', (req, res) => {
   res.sendFile(__dirname + '/signup.html');
 });
 
-app.get('/admin', function(req, res) {
+app.get('/admin', (req, res) => {
   res.sendFile(__dirname + '/input.html');
 });
 
-app.get('/admin-signup', function (req, res) {
-  res.render('admin-signup'); 
+app.get('/admin-signup', (req, res) => {
+  res.render('admin-signup');
 });
 
-app.get('/admin-login', function (req, res) {
-  res.render('admin-login'); 
+app.get('/admin-login', (req, res) => {
+  res.render('admin-login');
 });
-
 
 app.get('/students', (req, res) => {
-  console.log('Request received for /students'); // Log the request
+  console.log('Request received for /students');
   Student.find({})
     .then(students => {
-      console.log(students); // Log retrieved students
-      res.render('students', { students: students }); // Render the EJS template
+      console.log(students);
+      res.render('students', { students: students });
     })
     .catch(err => {
-      console.error('Failed to find students:', err); // Log any errors
-      res.status(500).send('Error fetching students'); // Send an error response
+      console.error('Failed to find students:', err);
+      res.status(500).send('Error fetching students');
     });
 });
-
 
 app.get('/timetable', (req, res) => {
   Timetable.find({})
@@ -160,7 +158,6 @@ app.post('/login', (req, res) => {
         return res.status(400).send('Invalid Email or Password');
       }
 
-      // Compare the hashed password from the request with the hashed password in the database
       if (bcrypt.compareSync(password, student.password)) {
         console.log('Logged in student:', student);
         res.redirect('/timetable');
@@ -171,28 +168,25 @@ app.post('/login', (req, res) => {
     .catch(err => console.error('Failed to find student:', err));
 });
 
-
 app.post('/admin-signup', (req, res) => {
   const adminEmail = req.body.adminEmail;
   const adminPassword = req.body.adminPassword;
 
-  // Check if the admin email and password are valid
   if (!adminEmail || !adminPassword) {
     return res.status(400).send('Invalid admin email or password');
   }
 
   const hashedAdminPassword = hashPassword(adminPassword);
 
-  // Create a new Admin instance and save it to the database
   const admin = new Admin({
-    adminEmail: adminEmail, // Use the correct field names from your Mongoose schema
-    adminPassword: hashedAdminPassword, // Use the correct field names from your Mongoose schema
+    adminEmail: adminEmail,
+    adminPassword: hashedAdminPassword,
   });
 
   admin.save()
     .then(result => {
       console.log('Admin account created:', result);
-      res.redirect('/admin-login'); // Redirect to the admin page
+      res.redirect('/admin-login');
     })
     .catch(err => {
       console.error('Failed to create admin account:', err);
@@ -200,39 +194,30 @@ app.post('/admin-signup', (req, res) => {
     });
 });
 
-
-
 app.post('/admin-login', async (req, res) => {
   const adminEmail = req.body.adminEmail;
   const adminPassword = req.body.adminPassword;
 
-  // Check if the admin email and password are provided
   if (!adminEmail || !adminPassword) {
     return res.status(400).send('Invalid email or password');
   }
 
   try {
-    // Find the admin with the provided email in the admin database
     const admin = await Admin.findOne({ adminEmail: adminEmail }).exec();
 
     if (!admin) {
       return res.status(400).send('Admin not found');
     }
 
-    // Check if the provided password matches the hashed password in the database
     if (bcrypt.compareSync(adminPassword, admin.adminPassword)) {
-      // Passwords match, so redirect to the admin route
       return res.redirect('/admin');
     } else {
-      return res.status(400).send('Admin not found');
+      return res.status(400).send('Invalid email or password');
     }
   } catch (err) {
     return res.status(500).send('Error finding admin');
   }
 });
-
-
-  
 
 app.post('/process', (req, res) => {
   const studentName = req.body.studentName;
@@ -261,13 +246,13 @@ app.post('/students', (req, res) => {
   const name = req.body.studentName
   const email = req.body.parentEmail;
   const phone = req.body.parentPhone;
-  const password = hashPassword(req.body.password); // Hash the password
+  const password = hashPassword(req.body.password);
 
   const student = new Student({
     name: name,
     email: email,
     phone: phone,
-    password: password // Store the hashed password
+    password: password
   });
 
   student.save()
@@ -278,42 +263,8 @@ app.post('/students', (req, res) => {
     .catch(err => console.error('Failed to insert student:', err));
 });
 
-// Checks if the email and password entered are correct
-app.post('/admin-login', async (req, res) => {
-  const adminEmail = req.body.adminEmail;
-  const adminPassword = req.body.adminPassword;
+const port = process.env.PORT || 3000;
 
-  // Check if the admin email and password are provided
-  if (!adminEmail || !adminPassword) {
-    return res.status(400).send('Invalid email or password');
-  }
-
-  try {
-    // Find the admin with the provided adminEmail in the admin database
-    const admin = await Admin.findOne({ adminEmail: adminEmail }).exec();
-
-    if (!admin) {
-      return res.status(400).send('Admin not found');
-    }
-
-    // Check if the provided password matches the hashed adminPassword in the database
-    if (bcrypt.compareSync(adminPassword, admin.adminPassword)) {
-      // Passwords match, so redirect to the admin route
-      return res.redirect('/admin');
-    } else {
-      return res.status(400).send('Invalid email or password');
-    }
-  } catch (err) {
-    return res.status(500).send('Error finding admin');
-  }
-});
-
-
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
-
-app.listen(port, function() {
-  console.log("Server has started Successfully at localhost:3000");
+app.listen(port, () => {
+  console.log(`Server has started successfully at localhost:${port}`);
 });
