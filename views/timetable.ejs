@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timetable</title>
+    <!-- Include Bootstrap CSS (you can link to the Bootstrap CSS file) -->
+    <link rel="stylesheet" href="public/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Student Timetable</h1>
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Student's Name</th>
+                    <th>Class Day</th>
+                    <th>Class Time</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% timetable.forEach(function(entry) { %>
+                    <tr>
+                        <td><%= entry.studentName %></td>
+                        <td><%= entry.classDay %></td>
+                        <td><%= entry.classTime %></td>
+                        <td><a href="<%= entry.link %>" target="_blank">Link</a></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <!-- Include Bootstrap JavaScript (if needed) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
