@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build"
+  publish = "public"
+
+[build.environment]
+  MONGODB_URI = 'mongodb+srv://admin-sonali:sonali1205@cluster0.3v3kd.mongodb.net/studentInfo?retryWrites=true&w=majority'
