@@ -107,7 +107,7 @@ const hashPassword = (password) => {
 };
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/login.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/signup', function(req, res) {
