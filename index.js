@@ -4,6 +4,7 @@ const ejs = require('ejs');
 const bcrypt = require('bcrypt');
 const app = express();
 const config = require("./config");
+require('dotenv').config();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
